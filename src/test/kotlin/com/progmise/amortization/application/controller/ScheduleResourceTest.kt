@@ -7,12 +7,14 @@ import com.progmise.amortization.domain.enums.AmortizationSystem
 import com.progmise.amortization.domain.enums.FeatureToggle
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.domain.service.AmortizationCalculator
-import com.progmise.amortization.infrastructure.togglz.FeatureToggleHelper
+import com.progmise.utils.config.ApiUtilsAutoConfiguration
+import com.progmise.utils.infrastructure.FeatureToggleHelper
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -24,6 +26,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @WebMvcTest(ScheduleResource::class)
+@Import(ApiUtilsAutoConfiguration::class)
 class ScheduleResourceTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -51,7 +54,7 @@ class ScheduleResourceTest {
 
     @Test
     fun `POST creates a schedule and returns 201`() {
-        whenever(featureToggleHelper.isActive(any())).thenReturn(true)
+        whenever(featureToggleHelper.isActive(any<FeatureToggle>())).thenReturn(true)
         whenever(scheduleRepository.save(any())).thenReturn(schedule)
 
         mockMvc

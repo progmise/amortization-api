@@ -1,9 +1,9 @@
 package com.progmise.amortization.delivery.validator
 
-import com.progmise.amortization.delivery.exception.ExceptionCode
 import com.progmise.amortization.domain.enums.AmortizationSystem
-import com.progmise.amortization.utils.generateTypeException
-import com.progmise.amortization.utils.validator.Validator
+import com.progmise.utils.exception.ExceptionCode
+import com.progmise.utils.util.generateTypeException
+import com.progmise.utils.validator.Validator
 
 class TypeValidator : Validator<String> {
     override fun validate(

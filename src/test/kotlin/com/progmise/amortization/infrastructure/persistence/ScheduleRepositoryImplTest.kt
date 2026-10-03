@@ -5,10 +5,10 @@ import com.progmise.amortization.domain.entity.Schedule
 import com.progmise.amortization.domain.entity.ScheduleCriteria
 import com.progmise.amortization.domain.enums.AmortizationSystem
 import com.progmise.amortization.domain.service.AmortizationCalculator
-import com.progmise.amortization.infrastructure.cache.Cache
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.entity.ScheduleEntity
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
+import com.progmise.utils.infrastructure.Cache
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull

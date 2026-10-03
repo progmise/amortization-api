@@ -3,10 +3,8 @@ package com.progmise.amortization.application.controller
 import com.progmise.amortization.application.controller.ScheduleResource.Companion.SCHEDULES_RESOURCE
 import com.progmise.amortization.delivery.controller.ScheduleController
 import com.progmise.amortization.delivery.dto.request.CreateScheduleRequest
-import com.progmise.amortization.delivery.dto.request.builder.PaginationRequestBuilder
 import com.progmise.amortization.delivery.dto.request.builder.ScheduleIdRequestBuilder
 import com.progmise.amortization.delivery.dto.request.builder.ScheduleRequestBuilder
-import com.progmise.amortization.delivery.dto.response.ListPaginationDTO
 import com.progmise.amortization.delivery.dto.response.ScheduleDTO
 import com.progmise.amortization.delivery.dto.response.ScheduleListDTO
 import com.progmise.amortization.delivery.dto.response.ScheduleSummaryDTO
@@ -17,10 +15,12 @@ import com.progmise.amortization.domain.enums.FeatureToggle
 import com.progmise.amortization.domain.exception.ScheduleNotFoundException
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.domain.service.AmortizationCalculator
-import com.progmise.amortization.infrastructure.togglz.FeatureToggleHelper
-import com.progmise.amortization.utils.Constants.ERROR_BODY
-import com.progmise.amortization.utils.exception.BadRequestException
-import com.progmise.amortization.utils.generateFeatureDisabledException
+import com.progmise.utils.delivery.ListPaginationDTO
+import com.progmise.utils.delivery.dto.request.builder.PaginationRequestBuilder
+import com.progmise.utils.exception.BadRequestException
+import com.progmise.utils.infrastructure.FeatureToggleHelper
+import com.progmise.utils.util.Constants.ERROR_BODY
+import com.progmise.utils.util.generateFeatureDisabledException
 import org.springframework.hateoas.EntityModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping

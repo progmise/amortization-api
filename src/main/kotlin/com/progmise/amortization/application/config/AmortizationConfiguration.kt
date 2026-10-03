@@ -1,11 +1,11 @@
 package com.progmise.amortization.application.config
 
 import com.progmise.amortization.domain.repository.ScheduleRepository
-import com.progmise.amortization.infrastructure.cache.Cache
-import com.progmise.amortization.infrastructure.cache.NoOpCache
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.ScheduleRepositoryImpl
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
+import com.progmise.utils.infrastructure.Cache
+import com.progmise.utils.infrastructure.NoOpCache
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile

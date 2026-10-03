@@ -1,6 +1,7 @@
 package com.progmise.amortization.application.config
 
 import com.progmise.amortization.domain.enums.FeatureToggle
+import com.progmise.utils.infrastructure.FeatureToggleStateRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.togglz.core.activation.ActivationStrategyProvider
@@ -30,16 +31,21 @@ class TogglzConfiguration {
             .userProvider(userProvider)
             .activationStrategyProvider(gradualActivationStrategyProvider)
             .build()
+            .also { featureManager ->
+                (stateRepository as? FeatureToggleStateRepository)?.setFeatureManager(featureManager)
+            }
 
     @Bean
     fun stateRepository(dataSource: DataSource): StateRepository =
-        JDBCStateRepository
-            .newBuilder(dataSource)
-            .tableName("FEATURE_TOGGLE")
-            .createTable(true)
-            .serializer(DefaultMapSerializer.singleline())
-            .noCommit(true)
-            .build()
+        FeatureToggleStateRepository(
+            JDBCStateRepository
+                .newBuilder(dataSource)
+                .tableName("FEATURE_TOGGLE")
+                .createTable(true)
+                .serializer(DefaultMapSerializer.singleline())
+                .noCommit(true)
+                .build(),
+        )
 
     @Bean
     fun featureProvider(): FeatureProvider = EnumClassFeatureProvider(FeatureToggle::class.java)

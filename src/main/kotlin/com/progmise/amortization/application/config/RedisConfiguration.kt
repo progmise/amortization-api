@@ -1,9 +1,8 @@
 package com.progmise.amortization.application.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.progmise.amortization.domain.enums.FeatureToggle
-import com.progmise.amortization.infrastructure.cache.Cache
-import com.progmise.amortization.infrastructure.cache.RedisCache
+import com.progmise.utils.infrastructure.Cache
+import com.progmise.utils.infrastructure.RCache
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
@@ -36,16 +35,14 @@ class RedisConfiguration {
     @Bean
     fun scheduleCache(
         redissonClient: RedissonClient,
-        objectMapper: ObjectMapper,
         @Value("\${redis.schedule.ttl.seconds}") timeToLive: Long,
         @Value("\${redis.schedule.name}") name: String,
     ): Cache =
-        RedisCache(
+        RCache(
             redissonClient = redissonClient,
             redisCollection = name,
             timeToLive = timeToLive,
             unit = TimeUnit.SECONDS,
-            objectMapper = objectMapper,
             isRedisEnabled = { FeatureToggle.SCHEDULE_CACHE_ON.isActive() },
         )
 }

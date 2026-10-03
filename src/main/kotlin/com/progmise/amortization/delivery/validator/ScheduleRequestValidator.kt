@@ -1,10 +1,12 @@
 package com.progmise.amortization.delivery.validator
 
 import com.progmise.amortization.delivery.dto.request.CreateScheduleRequest
-import com.progmise.amortization.delivery.exception.ExceptionCode
-import com.progmise.amortization.utils.generateRequiredFieldException
-import com.progmise.amortization.utils.ifNotNullAndBlank
-import com.progmise.amortization.utils.validator.Validator
+import com.progmise.utils.exception.ExceptionCode
+import com.progmise.utils.util.generateRequiredFieldException
+import com.progmise.utils.util.ifNotNullAndBlank
+import com.progmise.utils.validator.IntegerValidator
+import com.progmise.utils.validator.MajorOrEqualValidator
+import com.progmise.utils.validator.Validator
 
 class ScheduleRequestValidator :
     BaseValidator(),

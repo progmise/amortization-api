@@ -18,7 +18,9 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -35,6 +37,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql")
     implementation("org.redisson:redisson:3.37.0")
+    implementation("com.github.progmise:api-utils:0.1.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

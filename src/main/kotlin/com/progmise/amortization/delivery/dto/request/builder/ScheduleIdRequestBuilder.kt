@@ -1,8 +1,8 @@
 package com.progmise.amortization.delivery.dto.request.builder
 
 import com.progmise.amortization.delivery.validator.ScheduleIdValidator
-import com.progmise.amortization.utils.Constants.ERROR_PATH
-import com.progmise.amortization.utils.exception.BadRequestException
+import com.progmise.utils.exception.BadRequestException
+import com.progmise.utils.util.Constants.ERROR_PATH
 
 class ScheduleIdRequestBuilder(
     private val validator: ScheduleIdValidator,

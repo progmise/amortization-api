@@ -1,7 +1,7 @@
 package com.progmise.amortization.delivery.validator
 
-import com.progmise.amortization.delivery.exception.ExceptionCode
-import com.progmise.amortization.utils.validator.Validator
+import com.progmise.utils.exception.ExceptionCode
+import com.progmise.utils.validator.Validator
 
 class ScheduleIdValidator : Validator<String> {
     override fun validate(
