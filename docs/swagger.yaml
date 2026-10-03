@@ -1,0 +1,309 @@
+openapi: 3.0.3
+
+info:
+  title: amortization-api
+  description: >-
+    REST API that computes and stores loan amortization schedules.
+    Supports the French (fixed installment) and German (fixed principal)
+    amortization systems. Schedules are persisted in PostgreSQL and cached
+    in Redis; both the cache and the German system are feature-toggleable
+    via Togglz.
+  version: 1.0.0
+
+servers:
+  - url: /api/1.0
+
+tags:
+  - name: schedules
+    description: Amortization schedules
+
+paths:
+  /schedules:
+    post:
+      tags: [schedules]
+      summary: Create an amortization schedule
+      operationId: createSchedule
+      description: >-
+        Computes the amortization schedule for the given loan parameters and
+        persists it. When the `GERMAN_AMORTIZATION_ON` feature toggle is
+        disabled, requests with `system=GERMAN` are rejected.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScheduleRequest'
+            examples:
+              french:
+                summary: French system
+                value:
+                  principal: "1200"
+                  annualRate: "12"
+                  installments: "12"
+                  system: "FRENCH"
+                  startDate: "2026-02-01"
+      responses:
+        '201':
+          $ref: '#/components/responses/ScheduleCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    get:
+      tags: [schedules]
+      summary: List amortization schedules
+      operationId: getSchedules
+      description: >-
+        Returns a paginated list of stored schedules with HATEOAS
+        pagination links (`first`, `previous`, `next`, `last`).
+      parameters:
+        - $ref: '#/components/parameters/OffsetParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/ScheduleList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /schedules/{id}:
+    get:
+      tags: [schedules]
+      summary: Get an amortization schedule by id
+      operationId: getSchedule
+      description: >-
+        Returns the full schedule including every installment. Served from
+        Redis when the `SCHEDULE_CACHE_ON` feature toggle is enabled,
+        falling back to PostgreSQL.
+      parameters:
+        - $ref: '#/components/parameters/ScheduleIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/Schedule'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  parameters:
+    ScheduleIdParam:
+      name: id
+      in: path
+      required: true
+      description: Schedule identifier (UUID)
+      schema:
+        type: string
+        format: uuid
+      example: "5f7b2f7e-9a6b-4f0e-a3c1-8d6e5f4a3b2c"
+    OffsetParam:
+      name: _offset
+      in: query
+      required: false
+      description: Number of items to skip (default 0)
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    LimitParam:
+      name: _limit
+      in: query
+      required: false
+      description: Page size, between 1 and 100 (default 20)
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    CreateScheduleRequest:
+      type: object
+      required: [principal, annualRate, installments, system, startDate]
+      properties:
+        principal:
+          type: string
+          description: Loan principal, positive decimal with up to 2 decimals
+          example: "100000.50"
+        annualRate:
+          type: string
+          description: Nominal annual interest rate in percent (TNA)
+          example: "45.5"
+        installments:
+          type: string
+          description: Number of monthly installments, integer >= 1
+          example: "12"
+        system:
+          type: string
+          description: Amortization system
+          enum: [FRENCH, GERMAN]
+          example: "FRENCH"
+        startDate:
+          type: string
+          format: date
+          description: Due date of the first installment (ISO yyyy-MM-dd)
+          example: "2026-02-01"
+
+    Installment:
+      type: object
+      properties:
+        number:
+          type: integer
+          example: 1
+        dueDate:
+          type: string
+          format: date
+          example: "2026-02-01"
+        installment:
+          type: number
+          description: Total amount due (principal + interest)
+          example: 112.00
+        principal:
+          type: number
+          description: Principal amortized in this installment
+          example: 100.00
+        interest:
+          type: number
+          description: Interest accrued in this installment
+          example: 12.00
+        balance:
+          type: number
+          description: Outstanding balance after this installment
+          example: 1100.00
+
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        principal:
+          type: number
+        annualRate:
+          type: number
+        installments:
+          type: integer
+        system:
+          type: string
+          enum: [FRENCH, GERMAN]
+        startDate:
+          type: string
+          format: date
+        totalInterest:
+          type: number
+        totalPayment:
+          type: number
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Installment'
+
+    ScheduleSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        principal:
+          type: number
+        annualRate:
+          type: number
+        installments:
+          type: integer
+        system:
+          type: string
+          enum: [FRENCH, GERMAN]
+        startDate:
+          type: string
+          format: date
+        totalInterest:
+          type: number
+        totalPayment:
+          type: number
+
+    ScheduleList:
+      type: object
+      properties:
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleSummary'
+        _links:
+          type: object
+          description: HAL pagination links (first, previous, next, last)
+
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: >-
+            Dotted error code, e.g. `required.field.principal`,
+            `invalid.value.installments`, `schedule.not.found`,
+            `feature.disabled.german_amortization_on`
+          example: "required.field.principal"
+        message:
+          type: string
+          example: "The principal is required"
+        level:
+          type: string
+          enum: [INFO, WARNING, ERROR, CRITICAL]
+          example: "ERROR"
+        description:
+          type: string
+          nullable: true
+          example: "error.body"
+
+    ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+
+  responses:
+    ScheduleCreated:
+      description: Schedule created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Schedule'
+    Schedule:
+      description: A single schedule
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Schedule'
+    ScheduleList:
+      description: Paginated list of schedules
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ScheduleList'
+    BadRequest:
+      description: Invalid request (validation or malformed input)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsResponse'
+    NotFound:
+      description: Schedule not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsResponse'
+          example:
+            errors:
+              - code: schedule.not.found
+                message: "Schedule with id '5f7b2f7e-9a6b-4f0e-a3c1-8d6e5f4a3b2c' not found"
+                level: WARNING
+    InternalError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsResponse'

@@ -1,0 +1,42 @@
+server:
+  servlet:
+    context-path: "/api/1.0"
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/amortization}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      idle-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 0
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+
+logging:
+  level:
+    ROOT: INFO
+
+redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD:}
+  ssl: ${REDIS_SSL:false}
+  schedule:
+    name: "schedules"
+    ttl:
+      seconds: ${CACHE_SCHEDULES_TTL:300}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,prometheus"
