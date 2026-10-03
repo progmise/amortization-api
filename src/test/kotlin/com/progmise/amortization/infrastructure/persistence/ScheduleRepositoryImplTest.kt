@@ -1,6 +1,5 @@
 package com.progmise.amortization.infrastructure.persistence
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.progmise.amortization.domain.entity.Schedule
 import com.progmise.amortization.domain.entity.ScheduleCriteria
 import com.progmise.amortization.domain.enums.AmortizationSystem
@@ -8,7 +7,7 @@ import com.progmise.amortization.domain.service.AmortizationCalculator
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.entity.ScheduleEntity
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
-import com.progmise.utils.infrastructure.Cache
+import io.github.progmise.utils.infrastructure.Cache
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -43,7 +42,7 @@ class ScheduleRepositoryImplTest {
 
     @Test
     fun `findById returns cached schedule without hitting the database`() {
-        whenever(cache.getObject(eq(schedule.id!!), any<TypeReference<Schedule>>()))
+        whenever(cache.get(eq(schedule.id!!), eq(Schedule::class.java)))
             .thenReturn(schedule)
 
         val result = repository.findById(schedule.id!!)
@@ -54,7 +53,7 @@ class ScheduleRepositoryImplTest {
 
     @Test
     fun `findById falls back to the database and populates the cache`() {
-        whenever(cache.getObject(eq(schedule.id!!), any<TypeReference<Schedule>>()))
+        whenever(cache.get(eq(schedule.id!!), eq(Schedule::class.java)))
             .thenReturn(null)
         whenever(jpaRepository.findById(schedule.id!!)).thenReturn(Optional.of(mapper.toEntity(schedule)))
 
@@ -67,7 +66,7 @@ class ScheduleRepositoryImplTest {
 
     @Test
     fun `findById returns null when the schedule does not exist`() {
-        whenever(cache.getObject(eq("missing"), any<TypeReference<Schedule>>()))
+        whenever(cache.get(eq("missing"), eq(Schedule::class.java)))
             .thenReturn(null)
         whenever(jpaRepository.findById("missing")).thenReturn(Optional.empty())
 

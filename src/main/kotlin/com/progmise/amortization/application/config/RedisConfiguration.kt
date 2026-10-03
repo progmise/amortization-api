@@ -1,8 +1,8 @@
 package com.progmise.amortization.application.config
 
 import com.progmise.amortization.domain.enums.FeatureToggle
-import com.progmise.utils.infrastructure.Cache
-import com.progmise.utils.infrastructure.RCache
+import io.github.progmise.utils.infrastructure.Cache
+import io.github.progmise.utils.infrastructure.RCache
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
@@ -39,10 +39,9 @@ class RedisConfiguration {
         @Value("\${redis.schedule.name}") name: String,
     ): Cache =
         RCache(
-            redissonClient = redissonClient,
-            redisCollection = name,
-            timeToLive = timeToLive,
-            unit = TimeUnit.SECONDS,
-            isRedisEnabled = { FeatureToggle.SCHEDULE_CACHE_ON.isActive() },
-        )
+            redissonClient,
+            name,
+            timeToLive,
+            TimeUnit.SECONDS,
+        ) { FeatureToggle.SCHEDULE_CACHE_ON.isActive() }
 }

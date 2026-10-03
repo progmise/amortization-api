@@ -1,8 +1,8 @@
 package com.progmise.amortization.delivery.dto.request.builder
 
 import com.progmise.amortization.delivery.validator.ScheduleIdValidator
-import com.progmise.utils.exception.BadRequestException
-import com.progmise.utils.util.Constants.ERROR_PATH
+import io.github.progmise.utils.exception.BadRequestException
+import io.github.progmise.utils.util.Constants.ERROR_PATH
 
 class ScheduleIdRequestBuilder(
     private val validator: ScheduleIdValidator,
@@ -13,7 +13,7 @@ class ScheduleIdRequestBuilder(
         if (exceptions.isEmpty()) {
             return data
         } else {
-            throw BadRequestException(exceptions = exceptions, errorCodeGeneral = ERROR_PATH)
+            throw BadRequestException(exceptions, ERROR_PATH)
         }
     }
 }

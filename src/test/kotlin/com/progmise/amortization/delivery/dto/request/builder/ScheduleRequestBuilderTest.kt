@@ -3,7 +3,7 @@ package com.progmise.amortization.delivery.dto.request.builder
 import com.progmise.amortization.delivery.dto.request.CreateScheduleRequest
 import com.progmise.amortization.delivery.validator.ScheduleRequestValidator
 import com.progmise.amortization.domain.enums.AmortizationSystem
-import com.progmise.utils.exception.BadRequestException
+import io.github.progmise.utils.exception.BadRequestException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

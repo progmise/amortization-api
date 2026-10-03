@@ -1,7 +1,7 @@
 package com.progmise.amortization.delivery.validator
 
-import com.progmise.utils.exception.ExceptionCode
-import com.progmise.utils.validator.Validator
+import io.github.progmise.utils.exception.ExceptionCode
+import io.github.progmise.utils.validator.Validator
 
 class ScheduleIdValidator : Validator<String> {
     override fun validate(
@@ -13,8 +13,8 @@ class ScheduleIdValidator : Validator<String> {
         if (isValid(data).not()) {
             exceptions.add(
                 ExceptionCode(
-                    code = "invalid.value.${fieldNames.plus("id").joinToString(".")}",
-                    message = "The id provided is not a valid schedule id",
+                    "invalid.value.${fieldNames.plus("id").joinToString(".")}",
+                    "The id provided is not a valid schedule id",
                 ),
             )
         }

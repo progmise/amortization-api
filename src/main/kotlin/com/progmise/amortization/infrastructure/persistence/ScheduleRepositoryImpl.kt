@@ -4,8 +4,7 @@ import com.progmise.amortization.domain.entity.Schedule
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
-import com.progmise.utils.infrastructure.Cache
-import com.progmise.utils.util.typeRef
+import io.github.progmise.utils.infrastructure.Cache
 import org.springframework.data.domain.PageRequest
 import java.util.UUID
 
@@ -22,7 +21,7 @@ class ScheduleRepositoryImpl(
     }
 
     override fun findById(id: String): Schedule? {
-        val fromCache = scheduleCache.getObject(id, typeRef<Schedule>())
+        val fromCache = scheduleCache.get(id, Schedule::class.java)
 
         return fromCache
             ?: scheduleJpaRepository.findById(id).map { mapper.toDomain(it) }.orElse(null)?.also {

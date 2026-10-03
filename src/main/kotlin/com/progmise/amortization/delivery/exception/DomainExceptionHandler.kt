@@ -2,9 +2,9 @@ package com.progmise.amortization.delivery.exception
 
 import com.progmise.amortization.domain.exception.ScheduleNotFoundException
 import com.progmise.amortization.utils.generateScheduleNotFoundException
-import com.progmise.utils.dto.ApiError
-import com.progmise.utils.dto.ErrorsResponse
-import com.progmise.utils.enums.ErrorLevel
+import io.github.progmise.utils.dto.ApiError
+import io.github.progmise.utils.dto.ErrorsResponse
+import io.github.progmise.utils.enums.ErrorLevel
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -20,9 +20,9 @@ class DomainExceptionHandler {
             ErrorsResponse(
                 listOf(
                     ApiError(
-                        code = code.code,
-                        message = exception.message ?: code.message,
-                        level = ErrorLevel.WARNING,
+                        code.code(),
+                        exception.message ?: code.message(),
+                        ErrorLevel.WARNING,
                     ),
                 ),
             ),

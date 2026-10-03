@@ -15,12 +15,12 @@ import com.progmise.amortization.domain.enums.FeatureToggle
 import com.progmise.amortization.domain.exception.ScheduleNotFoundException
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.domain.service.AmortizationCalculator
-import com.progmise.utils.delivery.ListPaginationDTO
-import com.progmise.utils.delivery.dto.request.builder.PaginationRequestBuilder
-import com.progmise.utils.exception.BadRequestException
-import com.progmise.utils.infrastructure.FeatureToggleHelper
-import com.progmise.utils.util.Constants.ERROR_BODY
-import com.progmise.utils.util.generateFeatureDisabledException
+import io.github.progmise.utils.delivery.ListPaginationDTO
+import io.github.progmise.utils.delivery.dto.request.builder.PaginationRequestBuilder
+import io.github.progmise.utils.exception.BadRequestException
+import io.github.progmise.utils.infrastructure.FeatureToggleHelper
+import io.github.progmise.utils.util.Constants.ERROR_BODY
+import io.github.progmise.utils.util.ExceptionCodeGenerators
 import org.springframework.hateoas.EntityModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -51,8 +51,8 @@ class ScheduleResource(
 
         if (criteria.system == AmortizationSystem.GERMAN && featureToggleHelper.isActive(FeatureToggle.GERMAN_AMORTIZATION_ON).not()) {
             throw BadRequestException(
-                exceptions = listOf(generateFeatureDisabledException(FeatureToggle.GERMAN_AMORTIZATION_ON.name)),
-                errorCodeGeneral = ERROR_BODY,
+                listOf(ExceptionCodeGenerators.generateFeatureDisabledException(FeatureToggle.GERMAN_AMORTIZATION_ON.name)),
+                ERROR_BODY,
             )
         }
 
@@ -79,10 +79,10 @@ class ScheduleResource(
 
         return ListPaginationDTO
             .of(
-                list = ScheduleListDTO(schedules.map { ScheduleSummaryDTO(it) }),
-                totalSize = totalSize,
-                offset = offset,
-                limit = limit,
+                ScheduleListDTO(schedules.map { ScheduleSummaryDTO(it) }),
+                totalSize,
+                offset,
+                limit,
             ).toEntityModel(allParams, currentUrl())
     }
 

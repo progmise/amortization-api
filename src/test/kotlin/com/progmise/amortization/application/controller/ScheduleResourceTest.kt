@@ -7,8 +7,8 @@ import com.progmise.amortization.domain.enums.AmortizationSystem
 import com.progmise.amortization.domain.enums.FeatureToggle
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.domain.service.AmortizationCalculator
-import com.progmise.utils.config.ApiUtilsAutoConfiguration
-import com.progmise.utils.infrastructure.FeatureToggleHelper
+import io.github.progmise.utils.config.ApiUtilsAutoConfiguration
+import io.github.progmise.utils.infrastructure.FeatureToggleHelper
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever

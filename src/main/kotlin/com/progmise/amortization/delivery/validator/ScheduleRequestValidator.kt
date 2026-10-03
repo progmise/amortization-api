@@ -1,12 +1,12 @@
 package com.progmise.amortization.delivery.validator
 
 import com.progmise.amortization.delivery.dto.request.CreateScheduleRequest
-import com.progmise.utils.exception.ExceptionCode
-import com.progmise.utils.util.generateRequiredFieldException
-import com.progmise.utils.util.ifNotNullAndBlank
-import com.progmise.utils.validator.IntegerValidator
-import com.progmise.utils.validator.MajorOrEqualValidator
-import com.progmise.utils.validator.Validator
+import io.github.progmise.utils.exception.ExceptionCode
+import io.github.progmise.utils.util.ExceptionCodeGenerators
+import io.github.progmise.utils.util.Extensions
+import io.github.progmise.utils.validator.IntegerValidator
+import io.github.progmise.utils.validator.MajorOrEqualValidator
+import io.github.progmise.utils.validator.Validator
 
 class ScheduleRequestValidator :
     BaseValidator(),
@@ -21,48 +21,48 @@ class ScheduleRequestValidator :
 
         exceptions.addAll(validateRequiredFields(data, fieldNames))
 
-        data.principal.ifNotNullAndBlank {
+        Extensions.ifNotNullAndBlank(data.principal) {
             exceptions.addAll(
                 decimalValidator.validate(
-                    data = it,
-                    fieldNames = fieldNames.plus(CreateScheduleRequest::principal.name),
+                    it,
+                    fieldNames.plus(CreateScheduleRequest::principal.name),
                 ),
             )
         }
 
-        data.annualRate.ifNotNullAndBlank {
+        Extensions.ifNotNullAndBlank(data.annualRate) {
             exceptions.addAll(
                 decimalValidator.validate(
-                    data = it,
-                    fieldNames = fieldNames.plus(CreateScheduleRequest::annualRate.name),
+                    it,
+                    fieldNames.plus(CreateScheduleRequest::annualRate.name),
                 ),
             )
         }
 
-        data.installments.ifNotNullAndBlank {
+        Extensions.ifNotNullAndBlank(data.installments) {
             val fields = fieldNames.plus(CreateScheduleRequest::installments.name)
 
-            exceptions.addAll(integerValidator.validate(data = it, fieldNames = fields))
+            exceptions.addAll(integerValidator.validate(it, fields))
 
             if (IntegerValidator.isValid(it)) {
-                exceptions.addAll(minInstallmentsValidator.validate(data = it, fieldNames = fields))
+                exceptions.addAll(minInstallmentsValidator.validate(it, fields))
             }
         }
 
-        data.system.ifNotNullAndBlank {
+        Extensions.ifNotNullAndBlank(data.system) {
             exceptions.addAll(
                 typeValidator.validate(
-                    data = it,
-                    fieldNames = fieldNames.plus(CreateScheduleRequest::system.name),
+                    it,
+                    fieldNames.plus(CreateScheduleRequest::system.name),
                 ),
             )
         }
 
-        data.startDate.ifNotNullAndBlank {
+        Extensions.ifNotNullAndBlank(data.startDate) {
             exceptions.addAll(
                 dateValidator.validate(
-                    data = it,
-                    fieldNames = fieldNames.plus(CreateScheduleRequest::startDate.name),
+                    it,
+                    fieldNames.plus(CreateScheduleRequest::startDate.name),
                 ),
             )
         }
@@ -76,24 +76,16 @@ class ScheduleRequestValidator :
     ): List<ExceptionCode> {
         val exceptions = ArrayList<ExceptionCode>()
 
-        if (data.principal.isNullOrBlank()) {
-            exceptions.add(generateRequiredFieldException(fieldNames.plus(CreateScheduleRequest::principal.name)))
-        }
-
-        if (data.annualRate.isNullOrBlank()) {
-            exceptions.add(generateRequiredFieldException(fieldNames.plus(CreateScheduleRequest::annualRate.name)))
-        }
-
-        if (data.installments.isNullOrBlank()) {
-            exceptions.add(generateRequiredFieldException(fieldNames.plus(CreateScheduleRequest::installments.name)))
-        }
-
-        if (data.system.isNullOrBlank()) {
-            exceptions.add(generateRequiredFieldException(fieldNames.plus(CreateScheduleRequest::system.name)))
-        }
-
-        if (data.startDate.isNullOrBlank()) {
-            exceptions.add(generateRequiredFieldException(fieldNames.plus(CreateScheduleRequest::startDate.name)))
+        listOf(
+            data.principal to CreateScheduleRequest::principal.name,
+            data.annualRate to CreateScheduleRequest::annualRate.name,
+            data.installments to CreateScheduleRequest::installments.name,
+            data.system to CreateScheduleRequest::system.name,
+            data.startDate to CreateScheduleRequest::startDate.name,
+        ).forEach { (value, field) ->
+            if (value.isNullOrBlank()) {
+                exceptions.add(ExceptionCodeGenerators.generateRequiredFieldException(fieldNames.plus(field)))
+            }
         }
 
         return exceptions
