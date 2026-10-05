@@ -37,9 +37,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql")
     implementation("org.redisson:redisson:3.37.0")
-    // Pinned to api-commons@172fafc7b30a878771178bd5e406d9da340822cb via JitPack
-    // until the Central release exists.
-    implementation("com.github.progmise:api-commons:172fafc7b30a878771178bd5e406d9da340822cb")
+    // Pinned to api-commons@0e6fd33dfd23e1f6b64d289d7a74fbe6ee7f8878 (Maven)
+    // via JitPack until the Central release exists.
+    implementation("com.github.progmise:api-commons:0e6fd33dfd23e1f6b64d289d7a74fbe6ee7f8878")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
