@@ -20,6 +20,7 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -36,7 +37,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql")
     implementation("org.redisson:redisson:3.37.0")
-    implementation("io.github.progmise:api-commons:0.2.0")
+    // Pinned to api-commons@172fafc7b30a878771178bd5e406d9da340822cb via JitPack
+    // until the Central release exists.
+    implementation("com.github.progmise:api-commons:172fafc7b30a878771178bd5e406d9da340822cb")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
