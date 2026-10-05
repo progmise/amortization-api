@@ -1,12 +1,12 @@
 package com.progmise.amortization.delivery.validator
 
 import com.progmise.amortization.delivery.dto.request.CreateScheduleRequest
-import io.github.progmise.utils.exception.ExceptionCode
-import io.github.progmise.utils.util.ExceptionCodeGenerators
-import io.github.progmise.utils.util.Extensions
-import io.github.progmise.utils.validator.IntegerValidator
-import io.github.progmise.utils.validator.MajorOrEqualValidator
-import io.github.progmise.utils.validator.Validator
+import io.github.progmise.commons.exception.ExceptionCode
+import io.github.progmise.commons.util.ExceptionCodeGenerators
+import io.github.progmise.commons.util.Extensions
+import io.github.progmise.commons.validator.IntegerValidator
+import io.github.progmise.commons.validator.MajorOrEqualValidator
+import io.github.progmise.commons.validator.Validator
 
 class ScheduleRequestValidator :
     BaseValidator(),

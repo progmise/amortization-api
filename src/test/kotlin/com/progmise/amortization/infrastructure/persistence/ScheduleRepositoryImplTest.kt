@@ -7,7 +7,7 @@ import com.progmise.amortization.domain.service.AmortizationCalculator
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.entity.ScheduleEntity
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
-import io.github.progmise.utils.infrastructure.Cache
+import io.github.progmise.commons.infrastructure.Cache
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull

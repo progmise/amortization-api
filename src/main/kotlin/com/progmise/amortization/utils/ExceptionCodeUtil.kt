@@ -1,6 +1,6 @@
 package com.progmise.amortization.utils
 
-import io.github.progmise.utils.exception.ExceptionCode
+import io.github.progmise.commons.exception.ExceptionCode
 import java.text.MessageFormat.format
 
 private const val SCHEDULE_NOT_FOUND_CODE = "schedule.not.found"

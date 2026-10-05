@@ -4,7 +4,7 @@ import com.progmise.amortization.domain.entity.Schedule
 import com.progmise.amortization.domain.repository.ScheduleRepository
 import com.progmise.amortization.infrastructure.mapper.ScheduleEntityMapper
 import com.progmise.amortization.infrastructure.persistence.jpa.ScheduleJpaRepository
-import io.github.progmise.utils.infrastructure.Cache
+import io.github.progmise.commons.infrastructure.Cache
 import org.springframework.data.domain.PageRequest
 import java.util.UUID
 
