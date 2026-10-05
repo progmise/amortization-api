@@ -36,7 +36,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql")
     implementation("org.redisson:redisson:3.37.0")
-    implementation("io.github.progmise:api-utils:0.2.0")
+    implementation("io.github.progmise:api-commons:0.2.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

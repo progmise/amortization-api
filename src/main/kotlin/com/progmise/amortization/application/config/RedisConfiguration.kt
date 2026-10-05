@@ -1,8 +1,8 @@
 package com.progmise.amortization.application.config
 
 import com.progmise.amortization.domain.enums.FeatureToggle
-import io.github.progmise.utils.infrastructure.Cache
-import io.github.progmise.utils.infrastructure.RCache
+import io.github.progmise.commons.infrastructure.Cache
+import io.github.progmise.commons.infrastructure.RCache
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config

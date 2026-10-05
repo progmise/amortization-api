@@ -1,7 +1,7 @@
 package com.progmise.amortization.application.config
 
 import com.progmise.amortization.domain.enums.FeatureToggle
-import io.github.progmise.utils.infrastructure.FeatureToggleStateRepository
+import io.github.progmise.commons.infrastructure.FeatureToggleStateRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.togglz.core.activation.ActivationStrategyProvider
