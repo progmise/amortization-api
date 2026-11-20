@@ -77,4 +77,4 @@ the integration branch. Work lands on `<type>/<snake_description>` → PR to
 
 Once CI lands: bump the version in `build.gradle.kts`, merge
 `development` → `main`, run the **Release** workflow on `main`. Deploys go
-through `deploy-manifest` (`deploy.yml` dispatch).
+through `loans-app-model` (`deploy.yml` orchestrated dispatch).
